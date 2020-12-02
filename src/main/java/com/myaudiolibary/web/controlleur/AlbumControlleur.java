@@ -24,15 +24,13 @@ public class AlbumControlleur {
     @ResponseStatus(HttpStatus.CREATED)
     public Album createAlbum(@RequestBody Album album)
     {
-        albumService.save(album);
-        return album;
+        return albumService.createAlbum(album);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAlbum(@PathVariable Integer id)
     {
-
-        albumService.deleteById(id);
+        albumService.deleteAlbum(id);
     }
 }

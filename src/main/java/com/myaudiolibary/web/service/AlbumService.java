@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface AlbumService {
 
-    void deleteById(@RequestBody Album album);
+    void deleteAlbum(@PathVariable Integer id);
 
-    void save(@PathVariable Integer id);
+    Album createAlbum(@RequestBody Album album);
 }

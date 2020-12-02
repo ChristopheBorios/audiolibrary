@@ -1,18 +1,8 @@
 package com.myaudiolibary.web.service;
 
-import com.myaudiolibary.web.model.Artist;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.myaudiolibary.web.entity.Artist;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 public interface ArtistService {
 

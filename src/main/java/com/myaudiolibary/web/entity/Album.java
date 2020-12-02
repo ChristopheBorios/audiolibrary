@@ -1,6 +1,4 @@
-package com.myaudiolibary.web.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.myaudiolibary.web.entity;
 
 import javax.persistence.*;
 
@@ -19,17 +17,6 @@ public class Album {
     @ManyToOne
     @JoinColumn(name="ArtistId")
     private Artist artist;
-
-    public Album(Integer id, String title, Artist artist){
-        this.id=id;
-        this.title=title;
-        this.artist=artist;
-    }
-
-    public Album(Integer id, String title){
-        this.id=id;
-        this.title=title;
-    }
 
     public Album(){}
 

@@ -1,11 +1,9 @@
 package com.myaudiolibary.web.service.impl;
 
-import com.myaudiolibary.web.model.Album;
+import com.myaudiolibary.web.entity.Album;
 import com.myaudiolibary.web.repository.AlbumRepository;
 import com.myaudiolibary.web.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 

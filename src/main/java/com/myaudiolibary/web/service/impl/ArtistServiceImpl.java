@@ -1,6 +1,6 @@
 package com.myaudiolibary.web.service.impl;
 
-import com.myaudiolibary.web.model.Artist;
+import com.myaudiolibary.web.entity.Artist;
 import com.myaudiolibary.web.repository.ArtistRepository;
 import com.myaudiolibary.web.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;

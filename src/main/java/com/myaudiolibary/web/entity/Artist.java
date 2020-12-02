@@ -1,4 +1,4 @@
-package com.myaudiolibary.web.model;
+package com.myaudiolibary.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,17 +21,6 @@ public class Artist {
     @JsonIgnoreProperties("artist")
     @OneToMany(mappedBy="artist", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)//CascadeType.ALL= suppression si demande de suppression d'artiste
     private Set<Album> albums= new HashSet<>();
-
-    public Artist(Integer id, String name, Set<Album> albums){
-        this.id=id;
-        this.name=name;
-        this.albums=albums;
-    }
-
-    public Artist(Integer id, String name){
-        this.id=id;
-        this.name=name;
-    }
 
     public Artist(){}
     public Set<Album> getAlbums() {

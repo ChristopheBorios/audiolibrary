@@ -11,12 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface ArtistRepository extends JpaRepository<Artist, Integer> {
-
-
     Page<Artist> findByNameContainsIgnoreCase(String name, Pageable pageable);
 
-
     boolean existsByName(String name);
-
-   // Page<Artist> findByNameContainingIgnoreCase(String name, PageRequest pageRequest);
 }

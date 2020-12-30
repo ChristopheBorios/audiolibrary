@@ -16,9 +16,10 @@ public class ArtistControlleur {
     @Autowired
     private ArtistService artistService;
 
-    @GetMapping(value="/{id}", produces= MediaType.APPLICATION_JSON_VALUE)
-    public Artist getArtist(@PathVariable(value="id") Integer id){
-        return artistService.getArtist(id);
+    @GetMapping(value="index", produces= MediaType.APPLICATION_JSON_VALUE)
+    public @ModelAttribute("artists") Artist getArtist(@PathVariable(value="id") Integer id){
+        Artist artists = artistService.getArtist(id);
+        return artists;
     }
 
     @GetMapping(params = {"name"}, produces=MediaType.APPLICATION_JSON_VALUE)

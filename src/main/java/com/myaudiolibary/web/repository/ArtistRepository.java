@@ -1,12 +1,11 @@
 package com.myaudiolibary.web.repository;
 
+import java.util.List;
 import com.myaudiolibary.web.entity.Artist;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ArtistRepository extends JpaRepository<Artist, Integer> {
-    Page<Artist> findByNameContainsIgnoreCase(String name, Pageable pageable);
-
-    boolean existsByName(String name);
+@Repository
+public interface ArtistRepository extends CrudRepository<Artist, Integer> {
+        List<Artist> findByName(String name);
 }

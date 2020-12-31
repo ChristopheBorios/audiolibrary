@@ -1,19 +1,20 @@
 package com.myaudiolibary.web.controlleur;
 
 import com.myaudiolibary.web.entity.Artist;
-import com.myaudiolibary.web.service.ArtistService;
+import com.myaudiolibary.web.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/artists")
 public class ArtistControlleur {
 
-    @Autowired
+/*    @Autowired
     private ArtistService artistService;
 
     @GetMapping(value="index", produces= MediaType.APPLICATION_JSON_VALUE)
@@ -50,8 +51,63 @@ public class ArtistControlleur {
     public void deleteArtist(@PathVariable Integer id)
     {
         artistService.deleteArtist(id);
+    }*/
+
+    private final ArtistRepository artistRepository;
+
+    @Autowired
+    public ArtistControlleur(ArtistRepository artistRepository) {
+        this.artistRepository = artistRepository;
     }
 
+    @GetMapping("signup")
+    public String showSignUpForm(Artist artist) {
+        return "add-artist";
+    }
 
+    @GetMapping("list")
+    public String showUpdateForm(Model model) {
+        model.addAttribute("artists", artistRepository.findAll());
+        return "index";
+    }
 
+    @PostMapping("add")
+    public String addArtist(Artist artist, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "add-artist";
+        }
+
+        artistRepository.save(artist);
+        return "redirect:list";
+    }
+
+    @GetMapping("edit/{id}")
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid artist Id:" + id));
+        model.addAttribute("artist", artist);
+        return "update-artist";
+    }
+
+    @PostMapping("update/{id}")
+    public String updateArtist(@PathVariable("id") Integer id, Artist artist, BindingResult result,
+                               Model model) {
+        if (result.hasErrors()) {
+            artist.setId(id);
+            return "update-artist";
+        }
+
+        artistRepository.save(artist);
+        model.addAttribute("artists", artistRepository.findAll());
+        return "index";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteArtist(@PathVariable("id") Integer id, Model model) {
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid artist Id:" + id));
+        artistRepository.delete(artist);
+        model.addAttribute("artists", artistRepository.findAll());
+        return "index";
+    }
 }

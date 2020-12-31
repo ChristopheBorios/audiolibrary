@@ -1,40 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Artist Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
 </head>
+
 <body>
-<div align="center">
-    <h1>Artist Manager</h1>
-    <a href="new">Create New Product</a>
-    <br/><br/>
-    <table border="1" cellpadding="10">
-        <thead>
-            <tr>
-                <th>Artist ID</th>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>Made In</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="product : ${listProducts}">
-                <td th:text="${product.id}">Product ID</td>
-                <td th:text="${product.name}">Name</td>
-                <td th:text="${product.name}">Brand</td>
-                <td th:text="${product.name}">Made In</td>
-                <td th:text="${product.name}">Price</td>
-                <td>
-                    <a th:href="@{'/edit/' + ${product.id}}">Edit</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a th:href="@{'/delete/' + ${product.id}}">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container my-2">
+    <div class="card">
+        <div class="card-body">
+            <div th:switch="${artists}" class="container my-5">
+                <p class="my-5">
+                    <a href="/artists/signup" class="btn btn-primary"><i
+                            class="fas fa-user-plus ml-2">Add Artist</i></a>
+                </p>
+                <div class="col-md-10">
+                    <h2 th:case="null">No Artists yet!</h2>
+                    <div th:case="*">
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="artist : ${artists}">
+                                <td th:text="${artist.name}"></td>
+                                <td><a th:href="@{/artists/edit/{id}(id=${artist.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                                <td><a th:href="@{/artists/delete/{id}(id=${artist.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
+
 </html>

@@ -53,54 +53,18 @@ public class AlbumControlleur {
         this.albumRepository = albumRepository;
     }
 
-    @GetMapping("signup")
-    public String showSignUpForm(Album album) {
+/*    @GetMapping("/details/{id}")
+    public String artistAlbums(@PathVariable("id") Integer id Model model) {
+        model.addAttribute("albums", albumRepository.findAll());
         return "add-album";
-    }
-
-    @GetMapping("list")
-    public String showUpdateForm(Model model) {
-        model.addAttribute("albums", albumRepository.findAll());
-        return "index";
-    }
-
-    @PostMapping("add")
-    public String addAlbum(Album album, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "add-album";
-        }
-
-        albumRepository.save(album);
-        return "redirect:list";
-    }
-
-    @GetMapping("edit/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        Album album = albumRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
-        model.addAttribute("album", album);
-        return "update-artist";
-    }
-
-    @PostMapping("update/{id}")
-    public String updateAlbum(@PathVariable("id") Integer id, Album album, BindingResult result,
-                               Model model) {
-        if (result.hasErrors()) {
-            album.setId(id);
-            return "update-artist";
-        }
-
-        albumRepository.save(album);
-        model.addAttribute("albums", albumRepository.findAll());
-        return "index";
-    }
+    }*/
 
     @GetMapping("delete/{id}")
     public String deleteAlbum(@PathVariable("id") Integer id, Model model) {
         Album album = albumRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid artist Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
         albumRepository.delete(album);
         model.addAttribute("albums", albumRepository.findAll());
-        return "index";
+        return "add-album";
     }
 }

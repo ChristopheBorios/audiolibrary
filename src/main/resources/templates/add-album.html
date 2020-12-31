@@ -19,15 +19,13 @@
             <thead>
             <tr>
                 <th>Album</th>
-                <th>Edit</th>
                 <th>Delete</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="artist : ${artists}">
-                <td><a th:href="@{/artists/albums}" th:text="${artist.name}" /></td>
-                <td><a th:href="@{/artists/edit/{id}(id=${artist.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                <td><a th:href="@{/artists/delete/{id}(id=${artist.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+            <tr th:each="album : ${albums}">
+                <td th:text="${album.title}"></td>
+                <td><a th:href="@{/albums/delete/{id}(id=${album.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
             </tr>
             </tbody>
         </table>

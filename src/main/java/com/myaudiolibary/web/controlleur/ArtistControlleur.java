@@ -4,6 +4,7 @@ import com.myaudiolibary.web.entity.Artist;
 import com.myaudiolibary.web.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,9 +71,27 @@ public class ArtistControlleur {
         return "add-artist";
     }
 
-    @GetMapping("list")
+/*    @GetMapping("list")
     public String showUpdateForm(Model model) {
         model.addAttribute("artists", artistRepository.findAll());
+        return "index";
+    }*/
+
+    @GetMapping
+    public String customersPage(HttpServletRequest request, Model model) {
+
+        int page = 0; //default page number is 0 (yes it is weird)
+        int size = 10; //default page size is 10
+
+        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+            page = Integer.parseInt(request.getParameter("page")) - 1;
+        }
+
+        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
+            size = Integer.parseInt(request.getParameter("size"));
+        }
+
+        model.addAttribute("artists", artistRepository.findAll(PageRequest.of(page, size)));
         return "index";
     }
 
@@ -82,7 +102,7 @@ public class ArtistControlleur {
         }
 
         artistRepository.save(artist);
-        return "redirect:list";
+        return "index";
     }
 
     @GetMapping("edit/{id}")
@@ -115,7 +135,6 @@ public class ArtistControlleur {
         return "index";
     }
 
-//    @GetMapping("")
     @RequestMapping(params = {"name"},method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     public String avoirArtistByName(Model model, @RequestParam(value="name") String name){
         List<Artist> pageArt = artistRepository.findByNameContainsIgnoreCase(name);
@@ -123,4 +142,10 @@ public class ArtistControlleur {
 
         return "recherche";
     }
+
+/*    @GetMapping("/details")
+    public String artistAlbums(Model model) {
+        model.addAttribute("artists", artistRepository.albumsList());
+        return "add-album";
+    }*/
 }

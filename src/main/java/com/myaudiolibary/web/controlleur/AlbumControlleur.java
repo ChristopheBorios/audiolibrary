@@ -34,7 +34,6 @@ public class AlbumControlleur {
 package com.myaudiolibary.web.controlleur;
 
 import com.myaudiolibary.web.entity.Album;
-import com.myaudiolibary.web.entity.Artist;
 import com.myaudiolibary.web.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,7 +55,7 @@ public class AlbumControlleur {
 
     @GetMapping("signup")
     public String showSignUpForm(Album album) {
-        return "add-artist";
+        return "add-album";
     }
 
     @GetMapping("list")
@@ -68,7 +67,7 @@ public class AlbumControlleur {
     @PostMapping("add")
     public String addAlbum(Album album, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "add-artist";
+            return "add-album";
         }
 
         albumRepository.save(album);

@@ -21,13 +21,7 @@
                             class="fas fa-user-plus ml-2">Add Artist</i></a>
                 </p>
                 <div class="col-md-10">
-                  <h2 th:case="null">No Artists yet!</h2>
-                    <form role="search" class="navbar-form navbar-right" th:attr="action='/artists?'" method="GET">
-                        <div class="form-group">
-                            <input name="name" type="text" placeholder="Rechercher par nom" class="ember-text-field form-control ember-view">
-                        </div>
-                        <button type="submit" class="btn btn-default">Rechercher</button>
-                    </form>
+                    <h2 th:case="null">No Artists yet!</h2>
                     <div th:case="*">
                         <table class="table table-striped table-responsive-md">
                             <thead>

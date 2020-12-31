@@ -4,11 +4,15 @@ import com.myaudiolibary.web.entity.Artist;
 import com.myaudiolibary.web.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/artists")
@@ -109,5 +113,14 @@ public class ArtistControlleur {
         artistRepository.delete(artist);
         model.addAttribute("artists", artistRepository.findAll());
         return "index";
+    }
+
+//    @GetMapping("")
+    @RequestMapping(params = {"name"},method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    public String avoirArtistByName(Model model, @RequestParam(value="name") String name){
+        List<Artist> pageArt = artistRepository.findByNameContainsIgnoreCase(name);
+        model.addAttribute("artists", pageArt);
+
+        return "recherche";
     }
 }

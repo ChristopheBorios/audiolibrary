@@ -1,6 +1,7 @@
 package com.myaudiolibary.web.entity;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name="album")
@@ -25,6 +26,7 @@ public class Album {
     }
 
     public void setArtist(Artist artist) {
+
         this.artist = artist;
     }
 

@@ -1,70 +1,48 @@
-/*
-package com.myaudiolibary.web.controlleur;
-
-import com.myaudiolibary.web.entity.Album;
-import com.myaudiolibary.web.service.AlbumService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-
-@RestController
-@RequestMapping("/albums")
-public class AlbumControlleur {
-    @Autowired
-    private AlbumService albumService;
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Album createAlbum(@RequestBody Album album)
-    {
-        return albumService.createAlbum(album);
-    }
-
-    @DeleteMapping(value="/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAlbum(@PathVariable Integer id)
-    {
-        albumService.deleteAlbum(id);
-    }
-}
-*/
-
 package com.myaudiolibary.web.controlleur;
 
 import com.myaudiolibary.web.entity.Album;
 import com.myaudiolibary.web.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 
 @Controller
 @RequestMapping("/albums")
 public class AlbumControlleur {
-
-    private final AlbumRepository albumRepository;
-
     @Autowired
-    public AlbumControlleur(AlbumRepository albumRepository) {
-        this.albumRepository = albumRepository;
+    private AlbumRepository albumRepository;
+
+   //Creation d'un album (ne fonctionne pas)
+   @PostMapping("/createAlbum")
+    public RedirectView createAlbum(@ModelAttribute("album") Album album)
+    {
+
+        if(albumRepository.existsByTitle(album.getTitle())){
+            throw new EntityExistsException("Album title: "+album.getTitle()+" doesn't exist");
+        }
+        if(album.getTitle().isEmpty()){
+            throw new EntityNotFoundException("Album doesn't have title !");
+        }
+        albumRepository.save(album);
+
+        return new RedirectView("/artists/"+album.getArtist().getId());
     }
 
-/*    @GetMapping("/details/{id}")
-    public String artistAlbums(@PathVariable("id") Integer id Model model) {
-        model.addAttribute("albums", albumRepository.findAll());
-        return "add-album";
-    }*/
+    //Suppression d'un album
+    @RequestMapping(method = RequestMethod.GET, value="/{id}/{artid}/delete")
+    public RedirectView suppAlbum(@PathVariable("id") Integer id, @PathVariable("artid") int artid)
+    {
 
-    @GetMapping("delete/{id}")
-    public String deleteAlbum(@PathVariable("id") Integer id, Model model) {
-        Album album = albumRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
-        albumRepository.delete(album);
-        model.addAttribute("albums", albumRepository.findAll());
-        return "add-album";
+        if(!albumRepository.existsById(id)){
+            throw new EntityNotFoundException("Album: "+id+" not found !");
+        }
+        albumRepository.deleteById(id);
+
+        return new RedirectView("/artists/"+artid);
     }
 }

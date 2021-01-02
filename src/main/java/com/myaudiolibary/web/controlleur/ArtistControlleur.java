@@ -1,63 +1,23 @@
 package com.myaudiolibary.web.controlleur;
 
+import com.myaudiolibary.web.entity.Album;
 import com.myaudiolibary.web.entity.Artist;
+import com.myaudiolibary.web.repository.AlbumRepository;
 import com.myaudiolibary.web.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/artists")
 public class ArtistControlleur {
-
-/*    @Autowired
-    private ArtistService artistService;
-
-    @GetMapping(value="index", produces= MediaType.APPLICATION_JSON_VALUE)
-    public @ModelAttribute("artists") Artist getArtist(@PathVariable(value="id") Integer id){
-        Artist artists = artistService.getArtist(id);
-        return artists;
-    }
-
-    @GetMapping(params = {"name"}, produces=MediaType.APPLICATION_JSON_VALUE)
-    public Page<Artist> getArtistByName(@RequestParam(value="name") String name, @RequestParam(value="page") Integer page, @RequestParam(value="size") Integer size, @RequestParam(defaultValue="name") String sortProperty, @RequestParam(value="sortDirection", defaultValue="ASC") String sortDirection){
-        return artistService.getArtistByName(name, page, size, sortProperty, sortDirection);
-    }
-
-    @GetMapping(value="", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Page<Artist> getAllArtist(@RequestParam(value="page") Integer page, @RequestParam(value="size") Integer size, @RequestParam(defaultValue="name") String sortProperty, @RequestParam(value="sortDirection", defaultValue="ASC") String sortDirection){
-        return artistService.getAllArtist(page, size, sortProperty, sortDirection);
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Artist createArtist(@RequestBody Artist art)
-    {
-        return artistService.createArtist(art);
-    }
-
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}")
-    public Artist updateArtist(@PathVariable Integer id, @RequestBody Artist artist)
-    {
-        return artistService.updateArtist(id, artist);
-    }
-
-    @DeleteMapping(value="/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteArtist(@PathVariable Integer id)
-    {
-        artistService.deleteArtist(id);
-    }*/
 
     private final ArtistRepository artistRepository;
 
@@ -66,35 +26,30 @@ public class ArtistControlleur {
         this.artistRepository = artistRepository;
     }
 
+    //Ajout de l'album
+    @RequestMapping(value="/{id}", method= RequestMethod.GET)
+    public String avoirArtist(@PathVariable(value="id")Integer id, final ModelMap model){
+        Optional<Artist> artist = artistRepository.findById(id);
+        Album album= new Album();
+        model.addAttribute("album",album);
+        model.addAttribute("artist",artist.get());
+        return "artist-details";
+    }
+
+    // Premier artiste
     @GetMapping("signup")
     public String showSignUpForm(Artist artist) {
         return "add-artist";
     }
 
-/*    @GetMapping("list")
+    //Page d'accueil avec les liste des artistes
+    @GetMapping("list")
     public String showUpdateForm(Model model) {
         model.addAttribute("artists", artistRepository.findAll());
         return "index";
-    }*/
-
-    @GetMapping
-    public String customersPage(HttpServletRequest request, Model model) {
-
-        int page = 0; //default page number is 0 (yes it is weird)
-        int size = 10; //default page size is 10
-
-        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
-            page = Integer.parseInt(request.getParameter("page")) - 1;
-        }
-
-        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
-            size = Integer.parseInt(request.getParameter("size"));
-        }
-
-        model.addAttribute("artists", artistRepository.findAll(PageRequest.of(page, size)));
-        return "index";
     }
 
+    //Ajouter un artiste
     @PostMapping("add")
     public String addArtist(Artist artist, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -102,9 +57,10 @@ public class ArtistControlleur {
         }
 
         artistRepository.save(artist);
-        return "index";
+        return "redirect:list";
     }
 
+    //Modifier un artiste
     @GetMapping("edit/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         Artist artist = artistRepository.findById(id)
@@ -126,6 +82,7 @@ public class ArtistControlleur {
         return "index";
     }
 
+    //Supprimer un artiste
     @GetMapping("delete/{id}")
     public String deleteArtist(@PathVariable("id") Integer id, Model model) {
         Artist artist = artistRepository.findById(id)
@@ -135,17 +92,12 @@ public class ArtistControlleur {
         return "index";
     }
 
+    //Barre de recherche
     @RequestMapping(params = {"name"},method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
-    public String avoirArtistByName(Model model, @RequestParam(value="name") String name){
+    public String ArtistByName(Model model, @RequestParam(value="name") String name){
         List<Artist> pageArt = artistRepository.findByNameContainsIgnoreCase(name);
         model.addAttribute("artists", pageArt);
 
         return "recherche";
     }
-
-/*    @GetMapping("/details")
-    public String artistAlbums(Model model) {
-        model.addAttribute("artists", artistRepository.albumsList());
-        return "add-album";
-    }*/
 }
